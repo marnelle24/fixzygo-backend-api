@@ -59,10 +59,23 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        
         return response()->json([
             'status' => true, 
-            'user' => new UserResource($request->user())
+            'user' => new UserResource($request->user()),
+            'contacts' => $request->user()->contacts
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user)
+    {
+        // Delete the contact
+        $user->delete();
+
+        return response()->json([
+            'message' => 'User deleted successfully.'
         ]);
     }
 }

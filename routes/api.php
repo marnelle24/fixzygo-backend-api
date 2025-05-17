@@ -12,6 +12,7 @@ Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('api.v1.login');
 
     Route::middleware('auth:sanctum')->group(function () {
+        
         Route::post('logout', [AuthController::class, 'logout'])->name('api.v1.logout');
         Route::get('user', [AuthController::class, 'me'])->name('api.v1.profile');
         Route::delete('user/{user}', [AuthController::class, 'destroy'])->name('api.v1.delete.user');
@@ -22,6 +23,20 @@ Route::prefix('v1')->group(function () {
         Route::post('contact', [ContactController::class, 'store'])->name('api.v1.save.contact');
         Route::put('contact', [ContactController::class, 'update'])->name('api.v1.update.contact');
         Route::delete('contact/{contact}', [ContactController::class, 'destroy'])->name('api.v1.delete.contact');
+
+        // Admin Routes
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/admin/dashboard', function() {
+                return response()->json(['message' => 'this is admin dashboard']);
+            })->name('api.v1.admin.dashboard');
+        });
+
+        // User Routes
+        Route::middleware('role:user')->group(function () {
+            Route::get('/user/dashboard', function() {
+                return response()->json(['message' => 'this is user dashboard']);
+            })->name('api.v1.user.dashboard');
+        });
 
     });
 });

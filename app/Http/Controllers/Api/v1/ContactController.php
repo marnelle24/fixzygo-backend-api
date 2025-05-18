@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Models\User;
 use App\Models\Contact;
-use App\Http\Requests\StoreContactRequest;
-use App\Http\Requests\UpdateContactRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\StoreContactRequest;
+use App\Http\Requests\Api\v1\UpdateContactRequest;
 
 class ContactController extends Controller
 {

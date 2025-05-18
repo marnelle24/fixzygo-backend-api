@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreContactRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,22 @@ class StoreContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'numeric', 'exists:users,id'],
-            'label' => 'required',
-            'type' => 'required',
-            'value' => 'required',
+            'email' => ['required', 'email', 'exists:users,email'],
+            'password' => ['required', 'string', 'min:4'],
         ];
     }
 
+    /**
+     * Custom messages (optional but recommended).
+     */
     public function messages(): array
     {
         return [
-            'user_id.exists' => 'User ID not existed',
-            'label.required' => 'Please provide label of the contact information.',
-            'type.required' => 'Please provide type of contact information.',
-            'value.required' => 'Contact information must not be empty',
+            'email.required' => 'Please provide your email address.',
+            'email.email' => 'The email format is invalid.',
+            'email.exists' => 'No account found with this email.',
+            'password.required' => 'Please enter your password.',
+            'password.min' => 'Password must be at least 4 characters.',
         ];
     }
 

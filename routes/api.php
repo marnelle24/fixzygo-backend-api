@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Api\v1\ContactController;
+use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\AuthController;
 
 Route::get('/ping', function () {
@@ -10,6 +11,8 @@ Route::get('/ping', function () {
 Route::prefix('v1')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name('api.v1.register');
     Route::post('login', [AuthController::class, 'login'])->name('api.v1.login');
+
+    Route::get('categories', [CategoryController::class, 'index'])->name('api.v1.categories');
 
     Route::middleware('auth:sanctum')->group(function () {
         
@@ -23,6 +26,12 @@ Route::prefix('v1')->group(function () {
         Route::post('contact', [ContactController::class, 'store'])->name('api.v1.save.contact');
         Route::put('contact', [ContactController::class, 'update'])->name('api.v1.update.contact');
         Route::delete('contact/{contact}', [ContactController::class, 'destroy'])->name('api.v1.delete.contact');
+
+        //  Category API
+        Route::get('category/{category}', [CategoryController::class, 'show'])->name('api.v1.category');
+        Route::post('category', [CategoryController::class, 'store'])->name('api.v1.save.category');
+        Route::put('category', [CategoryController::class, 'update'])->name('api.v1.update.category');
+        Route::delete('category/{category}', [CategoryController::class, 'destroy'])->name('api.v1.delete.category');
 
         // Admin Routes
         Route::middleware('role:admin')->group(function () {

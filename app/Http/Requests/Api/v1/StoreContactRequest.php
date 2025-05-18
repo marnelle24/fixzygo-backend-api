@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api\v1;
+
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateContactRequest extends FormRequest
+class StoreContactRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,7 @@ class UpdateContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required',
-            'user_id' => 'required|numeric|exists:users,id',
+            'user_id' => ['required', 'numeric', 'exists:users,id'],
             'label' => 'required',
             'type' => 'required',
             'value' => 'required',

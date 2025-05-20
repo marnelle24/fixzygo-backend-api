@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Category;
+use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use App\Http\Requests\Api\v1\StoreCategoryRequest;
+use App\Http\Requests\Api\v1\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -23,19 +25,17 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $category = Category::create($validatedData);
+        return response()->json([
+            'status' => true,
+            'message' => 'Category created successfully',
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -43,15 +43,10 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
+        return response()->json([
+            'status' => true,
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -59,8 +54,78 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $validatedData = $request->validated();
+        $category->update($validatedData);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Category updated successfully',
+            'category' => $request->all(),
+        ]);
     }
+
+    /**
+     * Add category to user
+     */
+    public function addCategoryToUser($userId, $categoryId)
+    {
+        try
+        {
+            $user = User::findOrFail($userId);
+            $category = Category::findOrFail($categoryId);
+            $user->categories()->attach($categoryId);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Category added to user successfully',
+            ]);
+        }
+        catch (\Throwable $th) 
+        {
+            // Log the error for debugging
+            \Log::error('Failed to attach category to user: ' . $th->getMessage(), [
+                'exception' => $th
+            ]);
+        
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to attach category to user.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove category from user
+     */
+    public function removeCategoryFromUser($userId, $categoryId)
+    {
+        try
+        {
+            $user = User::findOrFail($userId);
+            $category = Category::findOrFail($categoryId);
+            $user->categories()->detach($categoryId);
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'Category removed from user successfully',
+            ]);
+        }
+        catch (\Throwable $th) 
+        {
+            // Log the error for debugging
+            \Log::error('Failed to detach category from user: ' . $th->getMessage(), [
+                'exception' => $th
+            ]);
+        
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to detach category from user.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.

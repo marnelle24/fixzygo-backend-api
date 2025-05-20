@@ -24,8 +24,6 @@ class UpdateContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required',
-            'user_id' => 'required|numeric|exists:users,id',
             'label' => 'required',
             'type' => 'required',
             'value' => 'required',
@@ -35,7 +33,8 @@ class UpdateContactRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.exists' => 'User ID not existed',
+            'user_id.required' => 'User ID is required.',
+            'user_id.exists' => 'User ID must exist in the users table.',
             'label.required' => 'Please provide label of the contact information.',
             'type.required' => 'Please provide type of contact information.',
             'value.required' => 'Contact information must not be empty',

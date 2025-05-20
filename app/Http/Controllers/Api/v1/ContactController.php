@@ -72,15 +72,27 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContactRequest $request)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
-        $contact = Contact::find($request->get('id'));
+        if($contact->user_id != auth()->user()->id) 
+        {
+            return response()->json([
+                'status' => false,
+                'message' => 'You are not authorized to update this contact.',
+                'user_auth' => auth()->user()->id,
+                'contact_user_id' => $contact->user_id,
+            ], 403);
+        }
+
+        // Validate the request
         $contact->update($request->validated());
 
         return response()->json([
             'status' => true,
             'message' => 'Updated contact successful',
-            'contact' => $contact
+            'contact' => $contact,
+            'user_auth' => auth()->user()->id,
+            'contact_user_id' => $contact->user_id,
         ]);
     }
 

@@ -24,14 +24,18 @@ Route::prefix('v1')->group(function () {
         Route::get('contacts', [ContactController::class, 'index'])->name('api.v1.user.contacts');
         Route::get('contact/{contact}', [ContactController::class, 'show'])->name('api.v1.contact');
         Route::post('contact', [ContactController::class, 'store'])->name('api.v1.save.contact');
-        Route::put('contact', [ContactController::class, 'update'])->name('api.v1.update.contact');
+        Route::put('contact/{contact}', [ContactController::class, 'update'])->name('api.v1.update.contact');
         Route::delete('contact/{contact}', [ContactController::class, 'destroy'])->name('api.v1.delete.contact');
 
         //  Category API
         Route::get('category/{category}', [CategoryController::class, 'show'])->name('api.v1.category');
         Route::post('category', [CategoryController::class, 'store'])->name('api.v1.save.category');
-        Route::put('category', [CategoryController::class, 'update'])->name('api.v1.update.category');
+        Route::put('category/{category}', [CategoryController::class, 'update'])->name('api.v1.update.category');
         Route::delete('category/{category}', [CategoryController::class, 'destroy'])->name('api.v1.delete.category');
+
+        // Add category to user
+        Route::post('user/{userId}/category/{categoryId}', [CategoryController::class, 'addCategoryToUser'])->name('api.v1.user.category');
+        Route::delete('user/{userId}/category/{categoryId}', [CategoryController::class, 'removeCategoryFromUser'])->name('api.v1.user.category.remove');
 
         // Admin Routes
         Route::middleware('role:admin')->group(function () {

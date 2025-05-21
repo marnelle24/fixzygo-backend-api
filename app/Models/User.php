@@ -67,4 +67,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Category::class, 'category_user');
     }
+
+    /**
+     * Get the educations of the user
+     */
+    public function educations(): HasMany
+    {
+        return $this->hasMany(Education::class);
+    }
 }

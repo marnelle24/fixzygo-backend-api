@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Models\User;
-use App\Models\Contact;
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use App\Http\Requests\Api\v1\StoreContactRequest;
 use App\Http\Requests\Api\v1\UpdateContactRequest;
 

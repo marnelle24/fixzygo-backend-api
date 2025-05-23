@@ -33,6 +33,9 @@ Route::prefix('v1')->group(function () {
         // Certification API Routes
         require base_path('routes/v1/certification.php');
 
+        // Accomplishment API Routes
+        require base_path('routes/v1/accomplishment.php');
+
         // Admin Routes
         Route::middleware('role:admin')->group(function () {
             Route::get('/admin/dashboard', function() {

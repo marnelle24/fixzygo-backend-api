@@ -17,11 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-
-        return response()->json([
-            'status' => true,
-            'categories' => $categories,
-        ]);
+        return response()->json(['status' => true, 'categories' => $categories], 200);
     }
 
     /**
@@ -31,11 +27,7 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validated();
         $category = Category::create($validatedData);
-        return response()->json([
-            'status' => true,
-            'message' => 'Category created successfully',
-            'category' => $category,
-        ]);
+        return response()->json([ 'status' => true, 'message' => 'Category created successfully', 'category' => $category], 200);
     }
 
     /**

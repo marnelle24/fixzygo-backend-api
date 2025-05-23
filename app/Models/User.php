@@ -83,4 +83,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Certification::class);
     }
+
+    /**
+     * Get the accomplishments of the user
+     */
+    public function accomplishments(): HasMany
+    {
+        return $this->hasMany(Accomplishment::class);
+    }
 }

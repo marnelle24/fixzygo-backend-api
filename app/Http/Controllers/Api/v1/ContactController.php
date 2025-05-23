@@ -15,11 +15,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::all();
-        
-        foreach ($contacts as $contact) {
-            $contact['user'] = $contact->user;
-        }
+        $contacts = Contact::with('user')->get();
         return response()->json(['status' => true, 'contact' => $contacts], 20);
     }
 
@@ -28,8 +24,11 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        $contact = Contact::create($request->validated());
-        return response()->json(['status' => true, 'message' => 'Added contact successful'], 200);
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = auth()->user()->id; // Set the user_id to the authenticated user's ID
+        $contact = Contact::create($validatedData);
+
+        return response()->json(['status' => true, 'message' => 'Added contact successful', 'data' => $contact], 200);
     }
 
     /**
@@ -39,8 +38,7 @@ class ContactController extends Controller
     {
         try 
         {
-            $contact['user'] = $contact->user;
-            return response()->json(['status' => true, 'contact' => $contact], 200);
+            return response()->json(['status' => true, 'contact' => $contact->user], 200);
         } 
         catch (\Throwable $th) 
         {

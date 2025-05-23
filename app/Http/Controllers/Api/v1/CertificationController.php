@@ -16,16 +16,8 @@ class CertificationController extends Controller
     {
         try 
         {
-            $certifications = Certification::all();
-            
-            foreach ($certifications as $certification) {
-                $certification['user'] = $certification->user;
-            }
-    
-            return response()->json([
-                'status' => true,
-                'certifications' => $certifications,
-            ]);
+            $certifications = Certification::with('user')->get();
+            return response()->json(['status' => true, 'certifications' => $certifications], 200);
         }
         catch (\Throwable $th) 
         {

@@ -14,12 +14,7 @@ class EducationController extends Controller
      */
     public function index()
     {
-        $educations = Education::all();
-
-        foreach ($educations as $education) {
-            $education['user'] = $education->user;
-        }
-
+        $educations = Education::with('user')->get();
         return response()->json(['status' => true, 'message' => 'Educations retrieved successfully', 'data' => $educations], 200);
     }
 
@@ -31,6 +26,7 @@ class EducationController extends Controller
         try
         {
             $validated = $request->validated();
+            $validated['user_id'] = auth()->user()->id; // Set the user_id to the authenticated user's ID
             $education = Education::create($validated);
     
             return response()->json(['status' => true, 'message' => 'Education created successfully', 'data' => $education], 201);

@@ -30,6 +30,9 @@ Route::prefix('v1')->group(function () {
         //  Category API Routes
         require base_path('routes/v1/category.php');
 
+        // Certification API Routes
+        require base_path('routes/v1/certification.php');
+
         // Admin Routes
         Route::middleware('role:admin')->group(function () {
             Route::get('/admin/dashboard', function() {

@@ -23,13 +23,7 @@ class AuthController extends Controller
 
         $user->assignRole('user'); 
         $token = $user->createToken('api-token')->plainTextToken;
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Registration successful',
-            'token' => $token,
-            'user' => new UserResource($user)
-        ], 201);
+        return response()->json(['status' => true, 'message' => 'Registration successful', 'token' => $token, 'user' => new UserResource($user)], 201);
     }
 
     public function login(LoginRequest $request)
@@ -42,12 +36,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Login successful',
-            'token' => $token,
-            'user' => new UserResource($user),
-        ]);
+        return response()->json(['status' => true, 'message' => 'Login successful', 'token' => $token, 'user' => new UserResource($user)], 200);
     }
 
     public function logout(Request $request)
@@ -61,11 +50,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json([
-            'status' => true, 
-            'user' => new UserResource($request->user()),
-            'contacts' => $request->user()->contacts
-        ]);
+        return response()->json(['status' => true,  'user' => new UserResource($request->user()), 'contacts' => $request->user()->contacts], 200);
     }
 
     /**

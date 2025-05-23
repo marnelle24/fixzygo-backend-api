@@ -57,11 +57,7 @@ class CategoryController extends Controller
         $validatedData = $request->validated();
         $category->update($validatedData);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Category updated successfully',
-            'category' => $request->all(),
-        ]);
+        return response()->json(['status' => true, 'message' => 'Category updated successfully', 'category' => $request->all()], 200);
     }
 
     /**
@@ -75,10 +71,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($categoryId);
             $user->categories()->attach($categoryId);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Category added to user successfully',
-            ]);
+            return response()->json(['status' => true, 'message' => 'Category added to user successfully'], 200);
         }
         catch (\Throwable $th) 
         {
@@ -87,11 +80,7 @@ class CategoryController extends Controller
                 'exception' => $th
             ]);
         
-            return response()->json([
-                'status' => false,
-                'message' => 'Failed to attach category to user.',
-                'error' => $th->getMessage(),
-            ], 500);
+            return response()->json(['status' => false, 'message' => 'Failed to attach category to user.', 'error' => $th->getMessage()], 500);
         }
     }
 
@@ -106,10 +95,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($categoryId);
             $user->categories()->detach($categoryId);
     
-            return response()->json([
-                'status' => true,
-                'message' => 'Category removed from user successfully',
-            ]);
+            return response()->json(['status' => true, 'message' => 'Category removed from user successfully'], 200);
         }
         catch (\Throwable $th) 
         {
@@ -118,11 +104,7 @@ class CategoryController extends Controller
                 'exception' => $th
             ]);
         
-            return response()->json([
-                'status' => false,
-                'message' => 'Failed to detach category from user.',
-                'error' => $th->getMessage(),
-            ], 500);
+            return response()->json(['status' => false, 'message' => 'Failed to detach category from user.', 'error' => $th->getMessage()], 500);
         }
     }
 

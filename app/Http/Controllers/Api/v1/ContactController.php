@@ -20,11 +20,7 @@ class ContactController extends Controller
         foreach ($contacts as $contact) {
             $contact['user'] = $contact->user;
         }
-
-        return response()->json([
-            'status' => true,
-            'contact' => $contacts,
-        ]);
+        return response()->json(['status' => true, 'contact' => $contacts], 20);
     }
 
     /**
@@ -33,11 +29,7 @@ class ContactController extends Controller
     public function store(StoreContactRequest $request)
     {
         $contact = Contact::create($request->validated());
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Added contact successful'
-        ]);
+        return response()->json(['status' => true, 'message' => 'Added contact successful'], 200);
     }
 
     /**
@@ -48,11 +40,7 @@ class ContactController extends Controller
         try 
         {
             $contact['user'] = $contact->user;
-        
-            return response()->json([
-                'status' => true,
-                'contact' => $contact,
-            ]);
+            return response()->json(['status' => true, 'contact' => $contact], 200);
         } 
         catch (\Throwable $th) 
         {
@@ -61,11 +49,7 @@ class ContactController extends Controller
                 'exception' => $th
             ]);
         
-            return response()->json([
-                'status' => false,
-                'message' => 'Failed to fetch contact details.',
-                'error' => $th->getMessage(),
-            ], 500);
+            return response()->json(['status' => false, 'message' => 'Failed to fetch contact details.', 'error' => $th->getMessage()], 500);
         }
     }
 
@@ -75,25 +59,11 @@ class ContactController extends Controller
     public function update(UpdateContactRequest $request, Contact $contact)
     {
         if($contact->user_id != auth()->user()->id) 
-        {
-            return response()->json([
-                'status' => false,
-                'message' => 'You are not authorized to update this contact.',
-                'user_auth' => auth()->user()->id,
-                'contact_user_id' => $contact->user_id,
-            ], 403);
-        }
+            return response()->json(['status' => false, 'message' => 'You are not authorized to update this contact.', 'user_auth' => auth()->user()->id, 'contact_user_id' => $contact->user_id], 403);
 
         // Validate the request
         $contact->update($request->validated());
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Updated contact successful',
-            'contact' => $contact,
-            'user_auth' => auth()->user()->id,
-            'contact_user_id' => $contact->user_id,
-        ]);
+        return response()->json(['status' => true, 'message' => 'Updated contact successful', 'contact' => $contact, 'user_auth' => auth()->user()->id, 'contact_user_id' => $contact->user_id], 200);
     }
 
     /**

@@ -20,11 +20,7 @@ class EducationController extends Controller
             $education['user'] = $education->user;
         }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Educations retrieved successfully',
-            'data' => $educations,
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'Educations retrieved successfully', 'data' => $educations], 200);
     }
 
     /**
@@ -37,11 +33,7 @@ class EducationController extends Controller
             $validated = $request->validated();
             $education = Education::create($validated);
     
-            return response()->json([
-                'status' => true,
-                'message' => 'Education created successfully',
-                'data' => $education,
-            ], 201);
+            return response()->json(['status' => true, 'message' => 'Education created successfully', 'data' => $education], 201);
         }
         catch (\Throwable $th) 
         {
@@ -50,11 +42,7 @@ class EducationController extends Controller
                 'exception' => $th
             ]);
         
-            return response()->json([
-                'status' => false,
-                'message' => 'Failed to add education',
-                'error' => $th->getMessage(),
-            ], 500);
+            return response()->json(['status' => false, 'message' => 'Failed to add education', 'error' => $th->getMessage()], 500);
         }
     }
 
@@ -63,11 +51,7 @@ class EducationController extends Controller
      */
     public function show(Education $education)
     {
-        return response()->json([
-            'status' => true,
-            'message' => 'Education retrieved successfully',
-            'data' => $education,
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'Education retrieved successfully', 'data' => $education], 200);
     }
 
     /**
@@ -78,79 +62,41 @@ class EducationController extends Controller
         $validated = $request->validated();
         $education->update($validated);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Education updated successfully',
-            'data' => $education,
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'Education updated successfully', 'data' => $education], 200);
     }
 
     public function userEducations()
     {
         $educations = auth()->user()->educations;
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User educations retrieved successfully',
-            'total' => $educations->count(),
-            'data' => $educations,
-            
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'User educations retrieved successfully', 'total' => $educations->count(), 'data' => $educations], 200);
     }
 
     public function userEducation(Education $education)
     {
         if($education->user_id !== auth()->id()) 
-        {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized action',
-            ], 403);
-        }
+            return response()->json(['status' => false, 'message' => 'Unauthorized action'], 403);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User education retrieved successfully',
-            'total' => $education->count,
-            'data' => $education,
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'User education retrieved successfully', 'total' => $education->count, 'data' => $education], 200);
     }
 
     public function userEducationUpdate(UpdateEducationRequest $request, Education $education)
     {
-        if($education->user_id !== auth()->id()) 
-        {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized action',
-            ], 403);
-        }
+        if($education->user_id !== auth()->id())
+            return response()->json(['status' => false, 'message' => 'Unauthorized action'], 403);
 
         $validated = $request->validated();
         $education->update($validated);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User education updated successfully',
-            'data' => $education,
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'User education updated successfully', 'data' => $education], 200);
     }
 
     public function userEducationDestroy(Education $education)
     {
-        if($education->user_id !== auth()->id()) 
-        {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized action',
-            ], 403);
-        }
+        if($education->user_id !== auth()->id())
+            return response()->json(['status' => false, 'message' => 'Unauthorized action'], 403);
 
         $education->delete();
-        
-        return response()->json([
-            'status' => true,
-            'message' => 'User education deleted successfully',
-        ], 200);
+        return response()->json(['status' => true, 'message' => 'User education deleted successfully'], 200);
     }
 }

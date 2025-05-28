@@ -11,7 +11,7 @@ Route::put('certification/{certification}', [CertificationController::class, 'up
 Route::delete('certification/{certification}', [CertificationController::class, 'destroy'])->name('api.v1.delete.certification');
 
 // get certifications by user
-Route::get('user/{certification}', [CertificationController::class, 'getUserCertifications'])->name('api.v1.user.certifications');
+Route::get('user/all-certifications', [CertificationController::class, 'getUserCertifications'])->name('api.v1.user.certifications');
 // get user certification
 Route::get('user/certification/{certification}', [CertificationController::class, 'getUserCertification'])->name('api.v1.user.certification');
 // update user certification

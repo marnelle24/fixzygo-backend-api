@@ -24,11 +24,11 @@ class UpdateAccomplishmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'sometimes|exists:users,id',
-            'title' => 'sometimes|string|max:255',
-            'about' => 'sometimes|string|max:1000',
-            'date' => 'sometimes|date',
-            'status' => 'sometimes|boolean',
+            'user_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:255',
+            'about' => 'required|string|max:1000',
+            'date' => 'required|date',
+            'status' => 'nullable|boolean',
         ];
     }
 

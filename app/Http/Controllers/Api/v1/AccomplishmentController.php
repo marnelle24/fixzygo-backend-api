@@ -158,12 +158,47 @@ class AccomplishmentController extends Controller
         }
     }
 
+    // update the logged in user specific accomplishment
+    public function updateUserAccomplishment(UpdateAccomplishmentRequest $request, Accomplishment $accomplishment)
+    {
+        try
+        {
+            $user = auth()->user();
+
+            if($request->user_id && $request->user_id != $user->id)
+                return response()->json(['status' => false, 'message' => 'You are not authorized to update this accomplishment'], 403);
+    
+            // Find the accomplishment for the authenticated user
+            $accomplishment = $user->accomplishments()->find($accomplishment->id);
+            if (!$accomplishment)
+                return response()->json(['status' => false, 'message' => 'Accomplishment not found'], 404);
+    
+            $validatedData = $request->validated();
+            $accomplishment->update($validatedData);
+    
+            return response()->json(['status' => true, 'message' => 'Accomplishment updated successfully', 'accomplishment' => $accomplishment], 200);
+        }
+        catch (\Throwable $th) 
+        {
+            // Log the error for debugging
+            \Log::error('Failed to update user accomplishment: ' . $th->getMessage(), [
+                'exception' => $th
+            ]);
+        
+            return response()->json(['status' => false, 'message' => 'Failed to update user accomplishment.', 'error' => $th->getMessage()], 500);
+        }
+    }
+
     // logged in user delete their accomplishment
     public function deleteUserAccomplishment(Accomplishment $accomplishment)
     {
         try
         {
             $user = auth()->user();
+            // Check if the user is authorized to delete this accomplishment
+            if($accomplishment->user_id && $accomplishment->user_id != $user->id)
+                return response()->json(['status' => false, 'message' => 'You are not authorized to delete this accomplishment'], 403);
+
             $accomplishment = $user->accomplishments()->find($accomplishment->id);
             if (!$accomplishment)
                 return response()->json(['status' => false, 'message' => 'Accomplishment not found'], 404);

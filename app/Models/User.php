@@ -91,4 +91,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Accomplishment::class);
     }
+
+    /**
+     * Get the interests of the user
+     */
+    public function interests(): BelongsToMany
+    {
+        return $this->belongsToMany(Interest::class, 'interest_user');
+    }
 }

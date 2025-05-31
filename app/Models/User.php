@@ -99,4 +99,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Interest::class, 'interest_user');
     }
+
+        /**
+     * Get the reviews of the user
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
 }

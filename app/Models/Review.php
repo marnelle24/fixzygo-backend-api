@@ -18,6 +18,7 @@ class Review extends Model
         'review_msg',
         'ratings',
         'date_given',
+        'isHidden'
     ];
 
     public function user()

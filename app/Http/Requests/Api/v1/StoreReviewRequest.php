@@ -30,7 +30,8 @@ class StoreReviewRequest extends FormRequest
             'rater_user_id' => 'nullable|exists:users,id',
             'review_msg'    => 'nullable|string|max:255',
             'ratings'       => 'nullable|integer|max:5',
-            'date_given'    => 'required|date'
+            'date_given'    => 'required|date',
+            'isHidden'      => 'boolean'
         ];
     }
 

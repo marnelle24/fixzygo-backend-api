@@ -39,6 +39,9 @@ Route::prefix('v1')->group(function () {
         // Interest API Routes
         require base_path('routes/v1/interest.php');
 
+        // Review API Routes
+        require base_path('routes/v1/review.php');
+
         // Admin Routes
         Route::middleware('role:admin')->group(function () {
             Route::get('/admin/dashboard', function() {

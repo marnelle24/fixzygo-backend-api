@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('rater_user_id')->nullable();
             $table->string('review_msg')->nullable();
             $table->integer('ratings')->nullable();
+            $table->boolean('isHidden')->default(0);
             $table->date('date_given')->nullable();
             $table->timestamps();
         });

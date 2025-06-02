@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Models\User;
 use App\Models\Review;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\StoreReviewRequest;
 use App\Http\Requests\Api\v1\UpdateReviewRequest;
 
@@ -11,12 +13,16 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($user_id)
     {
         try
         {
-            $interests = Review::all();
-            return response()->json(['status' => true, 'message' => 'Reviews fetched successfully', 'data' => $interests], 201);
+            $user = User::find($user_id);
+            if (!$user) 
+                return response()->json(['status' => false, 'message' => 'User not found'], 404);
+
+            $reviews = $user->reviews;
+            return response()->json(['status' => true, 'message' => 'Reviews fetched successfully', 'data' => $reviews], 201);
         }
         catch (\Throwable $th) 
         {
@@ -97,6 +103,50 @@ class ReviewController extends Controller
         catch (\Throwable $th) 
         {       
             \Log::error('Failed to delete review: ' . $th->getMessage(), [
+                'exception' => $th
+            ]);
+        }
+    }
+
+    //userRemoveReview
+    public function userRemoveReview($user_id, Review $review)
+    {
+        
+        try
+        {
+            if ($user_id == $review->user_id)
+            {
+                $review->delete($review->id);
+                return response()->json(['status' => true, 'message' => 'Review remove successfully'], 201);   
+            } 
+            else 
+                return response()->json(['status' => false, 'message' => 'You are not authorized to delete this review'], 403);
+        }
+        catch (\Throwable $th) 
+        {       
+            \Log::error('Failed to delete review: ' . $th->getMessage(), [
+                'exception' => $th
+            ]);
+        }
+    }
+
+    //userHideReview
+    public function userShowHideReview($user_id, Review $review)
+    {
+        try
+        {
+            if ($user_id == $review->user_id)
+            {
+                $review->isHidden = $review->isHidden ? false : true;
+                $review->save();
+                return response()->json(['status' => true, 'message' => 'Review updated successfully'], 201);   
+            } 
+            else 
+                return response()->json(['status' => false, 'message' => 'You are not authorized to hide this review'], 403);
+        }
+        catch (\Throwable $th) 
+        {       
+            \Log::error('Failed to hide review: ' . $th->getMessage(), [
                 'exception' => $th
             ]);
         }
